@@ -1,10 +1,12 @@
 import { useState } from 'react';
 import SlotCounter from 'react-slot-counter';
-import item1 from '../assets/asd/bell.png';
-import item2 from '../assets/asd/cherries.png';
-import item3 from '../assets/asd/orange.png';
-import item4 from '../assets/asd/plum.png';
-import item5 from '../assets/asd/watermelon.png';
+
+import item1 from '../assets/cherries.png';
+import item2 from '../assets/orange.png';
+import item3 from '../assets/plum.png';
+import item4 from '../assets/watermelon.png';
+import item5 from '../assets/clover.png';
+import item6 from '../assets/seven.png';
 
 const wrapImage = (src) => (
     <div className="w-64 h-64 flex justify-center items-center">
@@ -12,22 +14,64 @@ const wrapImage = (src) => (
     </div>
 );
 
+const weightedItems = [
+    { item: item1, weight: 0.40 }, // Cherries
+    { item: item2, weight: 0.25 }, // Orange
+    { item: item3, weight: 0.15 }, // Plum
+    { item: item4, weight: 0.10 }, // Watermelon
+    { item: item5, weight: 0.07 }, // clover
+    { item: item6, weight: 0.03 }, // Seven
+];
+
 const SlotMachine = () => {
-    const items = [item1, item2, item3, item4, item5];
+    const winChance = 0.2;
+    const items = [item1, item2, item3, item4, item5, item6];
     const [isSpinning, setIsSpinning] = useState(false);
     const [autoAnimationStart, setAutoAnimationStart] = useState(false);
 
-    const getRandomItems = () => {
-        const newItems = Array.from({ length: 3 }, () => {
-            const randomIndex = Math.floor(Math.random() * items.length);
-            return {
-                element: wrapImage(items[randomIndex]),
-                image: items[randomIndex],
-            };
-        });
+    const lostSpin = (items) => {
+        console.log('lose');
 
-        return newItems;
+        const availableItems = items.filter(item => item !== item1); // exclude cherries
+        let result;
+
+        do {
+            const first = availableItems[Math.floor(Math.random() * availableItems.length)];
+            const second = availableItems[Math.floor(Math.random() * availableItems.length)];
+            const third = availableItems[Math.floor(Math.random() * availableItems.length)];
+            const images = [first, second, third];
+
+            const [a, b, c] = images;
+            const allSame = a === b && b === c;
+            if (!allSame) {
+                result = images.map(img => ({
+                    element: wrapImage(img),
+                    image: img,
+                    symbol: img.split('assets/')[1].split('.')[0],
+                }));
+            }
+        } while (!result); 
+
+        return result;
     };
+
+    const winningSpin = (items) => {
+        console.log('win');
+        
+    };
+
+    const getRandomItems = () => {
+        const isWin = Math.random() < winChance;
+        let result;
+        if (isWin) {
+            result = winningSpin(items);
+            return result;
+        } else {
+            result = lostSpin(items);
+            return result;
+        }
+    };
+
 
     const [currentValues, setCurrentValues] = useState(() => getRandomItems());
 
