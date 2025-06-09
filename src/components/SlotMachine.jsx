@@ -30,8 +30,6 @@ const SlotMachine = () => {
     const [autoAnimationStart, setAutoAnimationStart] = useState(false);
 
     const lostSpin = (items) => {
-        console.log('lose');
-
         const availableItems = items.filter(item => item !== item1); // exclude cherries
         let result;
 
@@ -50,14 +48,145 @@ const SlotMachine = () => {
                     symbol: img.split('assets/')[1].split('.')[0],
                 }));
             }
-        } while (!result); 
+        } while (!result);
 
         return result;
     };
 
-    const winningSpin = (items) => {
-        console.log('win');
+    const winningSpin = () => {
+        const getWeightedRandomItem = (weightedList) => {
+            const rand = Math.random();
+            let sum = 0;
+            for (const { item, weight } of weightedList) {
+                sum += weight;
+                if (rand <= sum) return item;
+            }
+            return weightedList[weightedList.length - 1].item;
+        };
+
+        const wrap = (img) => ({
+            element: wrapImage(img),
+            image: img,
+            symbol: img.split('assets/')[1].split('.')[0],
+        });
+
+        const cherries = weightedItems[0].item;
+        const orange = weightedItems[1].item;
+        const plum = weightedItems[2].item;
+        const watermelon = weightedItems[3].item;
+        const clover = weightedItems[4].item;
+        const seven = weightedItems[5].item;
+
+        const winPatterns = [
+            // Single cherry - 34%
+            {
+                pattern: () => [cherries, getWeightedRandomItem(weightedItems.slice(1)), getWeightedRandomItem(weightedItems.slice(1))],
+                weight: 34.0
+            },
+
+            // Two cherries - 15%
+            {
+                pattern: () => [cherries, cherries, getWeightedRandomItem(weightedItems.slice(1))],
+                weight: 15.0
+            },
+
+            // Mixed fruits (any 3 different fruits) - 12%
+            {
+                pattern: () => {
+                    const fruits = [orange, plum, watermelon];
+                    const shuffled = [...fruits].sort(() => Math.random() - 0.5);
+                    return shuffled;
+                },
+                weight: 12.0
+            },
+
+            // Three cherries - 8%
+            {
+                pattern: [cherries, cherries, cherries],
+                weight: 8.0
+            },
+
+            // Three oranges - 8%
+            {
+                pattern: [orange, orange, orange],
+                weight: 8.0
+            },
+
+            // Three plums - 6%
+            {
+                pattern: [plum, plum, plum],
+                weight: 6.0
+            },
+
+            // Three watermelons - 4%
+            {
+                pattern: [watermelon, watermelon, watermelon],
+                weight: 4.0
+            },
+
+            // Two oranges + seven - 3%
+            {
+                pattern: () => [orange, orange, seven],
+                weight: 3.0
+            },
+
+            // Two plums + seven - 2.4%
+            {
+                pattern: () => [plum, plum, seven],
+                weight: 2.4
+            },
+
+            // Three clovers - 2%
+            {
+                pattern: [clover, clover, clover],
+                weight: 2.0
+            },
+
+            // Two cherries + seven - 2%
+            {
+                pattern: () => [cherries, cherries, seven],
+                weight: 2.0
+            },
+
+            // Two watermelons + seven - 2%
+            {
+                pattern: () => [watermelon, watermelon, seven],
+                weight: 2.0
+            },
+
+            // Two clovers + seven - 1.5%
+            {
+                pattern: () => [clover, clover, seven],
+                weight: 1.5
+            },
+
+            // Three sevens (jackpot) - 0.1%
+            {
+                pattern: [seven, seven, seven],
+                weight: 0.1
+            }
+        ];
+
+        const totalWeight = winPatterns.reduce((sum, { weight }) => sum + weight, 0);
+
+        let random = Math.random() * totalWeight;
+        let selectedPattern;
         
+        for (const patternObj of winPatterns) {
+            if (random < patternObj.weight) {                
+                selectedPattern = typeof patternObj.pattern === 'function' ?
+                    patternObj.pattern() :
+                    patternObj.pattern;
+                break;
+            }
+            random -= patternObj.weight;
+        }
+
+        if (!selectedPattern) {
+            selectedPattern = [cherries, getWeightedRandomItem(weightedItems.slice(1)), getWeightedRandomItem(weightedItems.slice(1))];
+        }
+        
+        return selectedPattern.map(wrap);
     };
 
     const getRandomItems = () => {
