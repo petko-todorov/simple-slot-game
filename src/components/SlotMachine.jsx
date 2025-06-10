@@ -7,6 +7,7 @@ import item3 from '../assets/plum.png';
 import item4 from '../assets/watermelon.png';
 import item5 from '../assets/clover.png';
 import item6 from '../assets/seven.png';
+import SpinButton from './SpinButton';
 
 const wrapImage = (src) => (
     <div className="w-64 h-64 flex justify-center items-center">
@@ -171,9 +172,9 @@ const SlotMachine = () => {
 
         let random = Math.random() * totalWeight;
         let selectedPattern;
-        
+
         for (const patternObj of winPatterns) {
-            if (random < patternObj.weight) {                
+            if (random < patternObj.weight) {
                 selectedPattern = typeof patternObj.pattern === 'function' ?
                     patternObj.pattern() :
                     patternObj.pattern;
@@ -185,7 +186,7 @@ const SlotMachine = () => {
         if (!selectedPattern) {
             selectedPattern = [cherries, getWeightedRandomItem(weightedItems.slice(1)), getWeightedRandomItem(weightedItems.slice(1))];
         }
-        
+
         return selectedPattern.map(wrap);
     };
 
@@ -204,7 +205,7 @@ const SlotMachine = () => {
 
     const [currentValues, setCurrentValues] = useState(() => getRandomItems());
 
-    const spin = () => {
+    const handleSpin = () => {
         if (isSpinning) return;
         setAutoAnimationStart(true);
         setIsSpinning(true);
@@ -219,23 +220,19 @@ const SlotMachine = () => {
     };
 
     return (
-        <div className='flex flex-col items-center'>
-            <SlotCounter
-                startValueOnce
-                autoAnimationStart={autoAnimationStart}
-                value={currentValues.map(v => v.element)}
-                dummyCharacters={items.map(item => wrapImage(item))}
-            // dummyCharacterCount={10} // random
-            // speed={5} // random 
-            />
-            <button
-                onClick={spin}
-                className='bg-amber-400 text-white px-4 py-2 mt-4 rounded-lg'
-                disabled={isSpinning}
-            >
-                {isSpinning ? 'Spinning...' : 'Spin'}
-            </button>
-        </div>
+        <>
+            <div className='flex flex-col items-center'>
+                <SlotCounter
+                    startValueOnce
+                    autoAnimationStart={autoAnimationStart}
+                    value={currentValues.map(v => v.element)}
+                    dummyCharacters={items.map(item => wrapImage(item))}
+                // dummyCharacterCount={10} // random
+                // speed={5} // random 
+                />
+            </div>
+
+        </>
     );
 };
 
