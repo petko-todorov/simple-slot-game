@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import SlotCounter from 'react-slot-counter';
 
 import item1 from '../assets/cherries.png';
@@ -7,7 +7,6 @@ import item3 from '../assets/plum.png';
 import item4 from '../assets/watermelon.png';
 import item5 from '../assets/clover.png';
 import item6 from '../assets/seven.png';
-import SpinButton from './SpinButton';
 
 const wrapImage = (src) => (
     <div className="w-64 h-64 flex justify-center items-center">
@@ -24,11 +23,9 @@ const weightedItems = [
     { item: item6, weight: 0.03 }, // Seven
 ];
 
-const SlotMachine = () => {
+const SlotMachine = ({ autoAnimationStart, triggerSpin }) => {
     const winChance = 0.2;
     const items = [item1, item2, item3, item4, item5, item6];
-    const [isSpinning, setIsSpinning] = useState(false);
-    const [autoAnimationStart, setAutoAnimationStart] = useState(false);
 
     const lostSpin = (items) => {
         const availableItems = items.filter(item => item !== item1); // exclude cherries
@@ -192,47 +189,27 @@ const SlotMachine = () => {
 
     const getRandomItems = () => {
         const isWin = Math.random() < winChance;
-        let result;
-        if (isWin) {
-            result = winningSpin(items);
-            return result;
-        } else {
-            result = lostSpin(items);
-            return result;
-        }
+        return isWin ? winningSpin(items) : lostSpin(items);
     };
-
 
     const [currentValues, setCurrentValues] = useState(() => getRandomItems());
 
-    const handleSpin = () => {
-        if (isSpinning) return;
-        setAutoAnimationStart(true);
-        setIsSpinning(true);
-
-        const newValues = getRandomItems();
-        setCurrentValues(newValues);
-
-        setTimeout(() => {
-            setIsSpinning(false);
-        }, 1000);
-
-    };
+    useEffect(() => {
+        if (triggerSpin > 0) {
+            const newValues = getRandomItems();
+            setCurrentValues(newValues);
+        }
+    }, [triggerSpin]);
 
     return (
-        <>
-            <div className='flex flex-col items-center'>
-                <SlotCounter
-                    startValueOnce
-                    autoAnimationStart={autoAnimationStart}
-                    value={currentValues.map(v => v.element)}
-                    dummyCharacters={items.map(item => wrapImage(item))}
-                // dummyCharacterCount={10} // random
-                // speed={5} // random 
-                />
-            </div>
-
-        </>
+        <div className='flex flex-col items-center'>
+            <SlotCounter
+                startValueOnce
+                autoAnimationStart={autoAnimationStart}
+                value={currentValues.map(v => v.element)}
+                dummyCharacters={items.map(item => wrapImage(item))}
+            />
+        </div>
     );
 };
 
