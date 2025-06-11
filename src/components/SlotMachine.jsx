@@ -3,13 +3,13 @@ import SlotCounter from 'react-slot-counter';
 
 import item1 from '../assets/cherries.png';
 import item2 from '../assets/orange.png';
-import item3 from '../assets/plum.png';
+import item3 from '../assets/grapes.png';
 import item4 from '../assets/watermelon.png';
 import item5 from '../assets/clover.png';
 import item6 from '../assets/seven.png';
 
 const wrapImage = (src) => (
-    <div className="w-64 h-64 flex justify-center items-center">
+    <div className="w-56 h-56 flex justify-center items-center">
         <img src={src} alt="" className="w-full h-full object-contain" />
     </div>
 );
@@ -17,7 +17,7 @@ const wrapImage = (src) => (
 const weightedItems = [
     { item: item1, weight: 0.40 }, // Cherries
     { item: item2, weight: 0.25 }, // Orange
-    { item: item3, weight: 0.15 }, // Plum
+    { item: item3, weight: 0.15 }, // Grapes
     { item: item4, weight: 0.10 }, // Watermelon
     { item: item5, weight: 0.07 }, // clover
     { item: item6, weight: 0.03 }, // Seven
@@ -70,7 +70,7 @@ const SlotMachine = ({ autoAnimationStart, triggerSpin }) => {
 
         const cherries = weightedItems[0].item;
         const orange = weightedItems[1].item;
-        const plum = weightedItems[2].item;
+        const grapes = weightedItems[2].item;
         const watermelon = weightedItems[3].item;
         const clover = weightedItems[4].item;
         const seven = weightedItems[5].item;
@@ -91,7 +91,7 @@ const SlotMachine = ({ autoAnimationStart, triggerSpin }) => {
             // Mixed fruits (any 3 different fruits) - 12%
             {
                 pattern: () => {
-                    const fruits = [orange, plum, watermelon];
+                    const fruits = [orange, grapes, watermelon];
                     const shuffled = [...fruits].sort(() => Math.random() - 0.5);
                     return shuffled;
                 },
@@ -110,9 +110,9 @@ const SlotMachine = ({ autoAnimationStart, triggerSpin }) => {
                 weight: 8.0
             },
 
-            // Three plums - 6%
+            // Three grapes - 6%
             {
-                pattern: [plum, plum, plum],
+                pattern: [grapes, grapes, grapes],
                 weight: 6.0
             },
 
@@ -128,9 +128,9 @@ const SlotMachine = ({ autoAnimationStart, triggerSpin }) => {
                 weight: 3.0
             },
 
-            // Two plums + seven - 2.4%
+            // Two grapes + seven - 2.4%
             {
-                pattern: () => [plum, plum, seven],
+                pattern: () => [grapes, grapes, seven],
                 weight: 2.4
             },
 
@@ -184,6 +184,8 @@ const SlotMachine = ({ autoAnimationStart, triggerSpin }) => {
             selectedPattern = [cherries, getWeightedRandomItem(weightedItems.slice(1)), getWeightedRandomItem(weightedItems.slice(1))];
         }
 
+        selectedPattern = selectedPattern.sort(() => Math.random() - 0.5);
+
         return selectedPattern.map(wrap);
     };
 
@@ -208,6 +210,7 @@ const SlotMachine = ({ autoAnimationStart, triggerSpin }) => {
                 autoAnimationStart={autoAnimationStart}
                 value={currentValues.map(v => v.element)}
                 dummyCharacters={items.map(item => wrapImage(item))}
+                // TODO speed={} 
             />
         </div>
     );
