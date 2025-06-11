@@ -28,7 +28,7 @@ function App() {
 
     return (
         <>
-            <div className="h-screen flex flex-col items-center justify-center gap-5 w-1/2 mx-auto">
+            <div className="h-screen flex flex-col items-center justify-center gap-1 w-1/2 mx-auto select-none">
                 <h1 className='text-6xl font-bold text-center text-amber-400'>
                     Test
                 </h1>
