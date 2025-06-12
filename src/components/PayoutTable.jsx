@@ -1,15 +1,16 @@
+import { useEffect, useState } from 'react';
 import seven from '../assets/seven.png';
 import SlotCounter from 'react-slot-counter';
 
 const payouts = [
-    { icons: "🍒", base: "1,000" },
-    { icons: "🍒🍒", base: "2,500" },
-    { icons: "🍒🍒🍒", base: "5,000" },
-    { icons: "🍊🍇🍉", base: "2,500" },
-    { icons: "🍊🍊🍊", base: "5,000" },
-    { icons: "🍇🍇🍇", base: "12,500" },
-    { icons: "🍉🍉🍉", base: "20,000" },
-    { icons: "🍀🍀🍀", base: "40,000" },
+    { icons: "🍒", base: "1,000", id: 0 },
+    { icons: "🍒🍒", base: "2,500", id: 1 },
+    { icons: "🍒🍒🍒", base: "5,000", id: 2 },
+    { icons: "🍊🍇🍉", base: "2,500", id: 3 },
+    { icons: "🍊🍊🍊", base: "5,000", id: 4 },
+    { icons: "🍇🍇🍇", base: "12,500", id: 5 },
+    { icons: "🍉🍉🍉", base: "20,000", id: 6 },
+    { icons: "🍀🍀🍀", base: "40,000", id: 7 },
     {
         icons:
             <div className='flex gap-2 items-center mt-1.5 pb-1'>
@@ -18,15 +19,28 @@ const payouts = [
                 <img src={seven} className='w-6 h-6' alt='seven' />
             </div>,
         base: "100,000",
+        id: 8
     },
 ];
 
-const PayoutTable = ({ multiplier, wonAmount }) => {
+const PayoutTable = ({ multiplier, winId }) => {
+    const [activeWinId, setActiveWinId] = useState(null);
+
+    useEffect(() => {
+        if (winId !== null) {
+            const timeout = setTimeout(() => {
+                setActiveWinId(winId);
+            }, 1000);
+            return () => clearTimeout(timeout);
+        } else {
+            setActiveWinId(null);
+        }
+    }, [winId]);
 
     const formatPayout = (base, multiplier) => {
-        const numericValue = parseInt(base.replace(/,/g, ""), 10); 
+        const numericValue = parseInt(base.replace(/,/g, ""), 10);
         const result = numericValue * multiplier;
-        return result.toLocaleString(); 
+        return result.toLocaleString();
     };
 
     return (
@@ -35,7 +49,10 @@ const PayoutTable = ({ multiplier, wonAmount }) => {
                 {payouts.map((item, idx) => (
                     <div
                         key={idx}
-                        className="w-[30%] bg-blue-800 rounded-md p-2 m-1 flex flex-col items-center text-center"
+                        className={`w-[30%] rounded-md p-2 m-1 flex flex-col items-center text-center ${item.id === activeWinId
+                            ? 'bg-amber-600 border-2 border-amber-600'
+                            : 'bg-blue-800'
+                            }`}
                     >
                         <div className="text-3xl">
                             {item.icons}
