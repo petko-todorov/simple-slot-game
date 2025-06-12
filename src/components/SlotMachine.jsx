@@ -24,10 +24,12 @@ const weightedItems = [
 ];
 
 const SlotMachine = ({ autoAnimationStart, triggerSpin }) => {
-    const winChance = 0.2;
+    const winChance = 0.9;
     const items = [item1, item2, item3, item4, item5, item6];
+    const [isWon, setIsWon] = useState(false);
 
     const lostSpin = (items) => {
+        setIsWon(false);
         const availableItems = items.filter(item => item !== item1); // exclude cherries
         let result;
 
@@ -52,6 +54,7 @@ const SlotMachine = ({ autoAnimationStart, triggerSpin }) => {
     };
 
     const winningSpin = () => {
+        setIsWon(true);
         const getWeightedRandomItem = (weightedList) => {
             const rand = Math.random();
             let sum = 0;
@@ -76,92 +79,105 @@ const SlotMachine = ({ autoAnimationStart, triggerSpin }) => {
         const seven = weightedItems[5].item;
 
         const winPatterns = [
-            // Single cherry - 34%
+            // Single cherry - 25%
             {
                 pattern: () => [cherries, getWeightedRandomItem(weightedItems.slice(1)), getWeightedRandomItem(weightedItems.slice(1))],
-                weight: 34.0
+                weight: 25,
+                baseWin: 1000
             },
 
-            // Two cherries - 15%
+            // Two cherries - 12.5%
             {
                 pattern: () => [cherries, cherries, getWeightedRandomItem(weightedItems.slice(1))],
-                weight: 15.0
+                weight: 12.5,
+                baseWin: 2500
             },
 
-            // Mixed fruits (any 3 different fruits) - 12%
+            // Mixed fruits (any 3 different fruits) - 12.5%
             {
                 pattern: () => {
                     const fruits = [orange, grapes, watermelon];
-                    const shuffled = [...fruits].sort(() => Math.random() - 0.5);
-                    return shuffled;
+                    return [...fruits].sort(() => Math.random() - 0.5);
                 },
-                weight: 12.0
+                weight: 12.5,
+                baseWin: 2500
             },
 
             // Three cherries - 8%
             {
                 pattern: [cherries, cherries, cherries],
-                weight: 8.0
+                weight: 8,
+                baseWin: 5000
             },
 
             // Three oranges - 8%
             {
                 pattern: [orange, orange, orange],
-                weight: 8.0
+                weight: 8,
+                baseWin: 5000
+            },
+
+            // Two cherries + seven - 8%
+            {
+                pattern: () => [cherries, cherries, seven],
+                weight: 8,
+                baseWin: 5000
+            },
+
+            // Two oranges + seven - 6%
+            {
+                pattern: () => [orange, orange, seven],
+                weight: 6,
+                baseWin: 10000
             },
 
             // Three grapes - 6%
             {
                 pattern: [grapes, grapes, grapes],
-                weight: 6.0
+                weight: 6,
+                baseWin: 12500
             },
 
             // Three watermelons - 4%
             {
                 pattern: [watermelon, watermelon, watermelon],
-                weight: 4.0
-            },
-
-            // Two oranges + seven - 3%
-            {
-                pattern: () => [orange, orange, seven],
-                weight: 3.0
+                weight: 4,
+                baseWin: 20000
             },
 
             // Two grapes + seven - 2.4%
             {
                 pattern: () => [grapes, grapes, seven],
-                weight: 2.4
+                weight: 3.5,
+                baseWin: 25000
             },
 
             // Three clovers - 2%
             {
                 pattern: [clover, clover, clover],
-                weight: 2.0
-            },
-
-            // Two cherries + seven - 2%
-            {
-                pattern: () => [cherries, cherries, seven],
-                weight: 2.0
+                weight: 2,
+                baseWin: 40000
             },
 
             // Two watermelons + seven - 2%
             {
                 pattern: () => [watermelon, watermelon, seven],
-                weight: 2.0
+                weight: 2,
+                baseWin: 40000
             },
 
-            // Two clovers + seven - 1.5%
+            // Three clovers - 1.5%
             {
                 pattern: () => [clover, clover, seven],
-                weight: 1.5
+                weight: 1.5,
+                baseWin: 80000
             },
 
-            // Three sevens (jackpot) - 0.1%
+            // Three sevens (jackpot) - 1%
             {
                 pattern: [seven, seven, seven],
-                weight: 0.1
+                weight: 1, 
+                baseWin: 100000
             }
         ];
 
@@ -178,7 +194,7 @@ const SlotMachine = ({ autoAnimationStart, triggerSpin }) => {
                 break;
             }
             random -= patternObj.weight;
-        }
+        };
 
         if (!selectedPattern) {
             selectedPattern = [cherries, getWeightedRandomItem(weightedItems.slice(1)), getWeightedRandomItem(weightedItems.slice(1))];
@@ -210,7 +226,7 @@ const SlotMachine = ({ autoAnimationStart, triggerSpin }) => {
                 autoAnimationStart={autoAnimationStart}
                 value={currentValues.map(v => v.element)}
                 dummyCharacters={items.map(item => wrapImage(item))}
-                // TODO speed={} 
+            // TODO speed={} 
             />
         </div>
     );
