@@ -21,12 +21,12 @@ const payouts = [
     },
 ];
 
-const PayoutTable = ({ multiplier }) => {
+const PayoutTable = ({ multiplier, wonAmount }) => {
 
     const formatPayout = (base, multiplier) => {
-        const numericValue = parseInt(base.replace(/,/g, ""), 10); // Remove commas, parse to int
+        const numericValue = parseInt(base.replace(/,/g, ""), 10); 
         const result = numericValue * multiplier;
-        return result.toLocaleString(); // Add commas back
+        return result.toLocaleString(); 
     };
 
     return (
