@@ -222,6 +222,21 @@ const SlotMachine = ({
     const [currentValues, setCurrentValues] = useState([]);
 
     useEffect(() => {
+        const getRandomImage = () => items[Math.floor(Math.random() * items.length)];
+        const placeholders = Array.from({ length: 3 }, () => {
+            const img = getRandomImage();
+            return {
+                element: wrapImage(img),
+                image: img,
+                symbol: img.split('assets/')[1].split('.')[0],
+            };
+        });
+
+        setCurrentValues(placeholders);
+    }, []);
+
+
+    useEffect(() => {
         if (triggerSpin > 0) {
             const newValues = getRandomItems();
             setCurrentValues(newValues);
