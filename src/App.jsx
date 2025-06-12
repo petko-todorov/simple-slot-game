@@ -4,6 +4,7 @@ import SpinButton from './components/SpinButton'
 import BalanceDisplay from './components/BalanceDisplay';
 import BetControls from './components/BetControls';
 import PayoutTable from './components/PayoutTable';
+import SlotCounter from 'react-slot-counter';
 
 function App() {
     const [isSpinning, setIsSpinning] = useState(false);
@@ -12,9 +13,13 @@ function App() {
     const [bet, setBet] = useState(500);
     const [multiplier, setMultiplier] = useState(1);
     const [wonAmount, setWonAmount] = useState(0);
-    const [balance, setBalance] = useState(5000);
+    const [balance, setBalance] = useState(600000);
+    const [winId, setWinId] = useState();
 
     const handleSpin = () => {
+        setWinId(null);
+
+        if (balance < bet) return;
         if (isSpinning) return;
 
         setAutoAnimationStart(true);
@@ -33,6 +38,7 @@ function App() {
                 <h1 className='text-6xl font-bold text-center text-amber-400'>
                     Test
                 </h1>
+                <h1>{wonAmount}</h1>
 
                 <SlotMachine
                     isSpinning={isSpinning}
@@ -41,10 +47,13 @@ function App() {
                     setWonAmount={setWonAmount}
                     multiplier={multiplier}
                     setBalance={setBalance}
+                    bet={bet}
+                    setWinId={setWinId}
                 />
 
                 <PayoutTable
                     multiplier={multiplier}
+                    winId={winId}
                 />
 
                 <BetControls
