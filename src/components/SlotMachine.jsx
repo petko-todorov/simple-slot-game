@@ -28,14 +28,13 @@ const SlotMachine = ({
     triggerSpin,
     setWonAmount,
     multiplier,
-    setBalance
+    setBalance,
+    bet
 }) => {
-    const winChance = 0.9;
+    const winChance = 0.01;
     const items = [item1, item2, item3, item4, item5, item6];
-    const [isWon, setIsWon] = useState(false);
 
     const lostSpin = (items) => {
-        setIsWon(false);
         const availableItems = items.filter(item => item !== item1); // exclude cherries
         let result;
 
@@ -56,6 +55,7 @@ const SlotMachine = ({
             }
         } while (!result);
 
+        setBalance(prev => prev - bet);
         return result;
     };
 
