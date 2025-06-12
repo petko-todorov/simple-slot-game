@@ -29,9 +29,10 @@ const SlotMachine = ({
     setWonAmount,
     multiplier,
     setBalance,
-    bet
+    bet,
+    setWinId
 }) => {
-    const winChance = 0.01;
+    const winChance = 0.9;
     const items = [item1, item2, item3, item4, item5, item6];
 
     const lostSpin = (items) => {
@@ -60,7 +61,6 @@ const SlotMachine = ({
     };
 
     const winningSpin = () => {
-        setIsWon(true);
         const getWeightedRandomItem = (weightedList) => {
             const rand = Math.random();
             let sum = 0;
@@ -87,6 +87,7 @@ const SlotMachine = ({
         const winPatterns = [
             // Single cherry - 25%
             {
+                id: 0,
                 pattern: () => [cherries, getWeightedRandomItem(weightedItems.slice(1)), getWeightedRandomItem(weightedItems.slice(1))],
                 weight: 25,
                 baseWin: 1000
@@ -94,6 +95,7 @@ const SlotMachine = ({
 
             // Two cherries - 12.5%
             {
+                id: 1,
                 pattern: () => [cherries, cherries, getWeightedRandomItem(weightedItems.slice(1))],
                 weight: 12.5,
                 baseWin: 2500
@@ -101,6 +103,7 @@ const SlotMachine = ({
 
             // Mixed fruits (any 3 different fruits) - 12.5%
             {
+                id: 3,
                 pattern: () => {
                     const fruits = [orange, grapes, watermelon];
                     return [...fruits].sort(() => Math.random() - 0.5);
@@ -111,6 +114,7 @@ const SlotMachine = ({
 
             // Three cherries - 8%
             {
+                id: 2,
                 pattern: [cherries, cherries, cherries],
                 weight: 8,
                 baseWin: 5000
@@ -118,6 +122,7 @@ const SlotMachine = ({
 
             // Three oranges - 8%
             {
+                id: 4,
                 pattern: [orange, orange, orange],
                 weight: 8,
                 baseWin: 5000
@@ -125,6 +130,7 @@ const SlotMachine = ({
 
             // Two cherries + seven - 8%
             {
+                id: [1],
                 pattern: () => [cherries, cherries, seven],
                 weight: 8,
                 baseWin: 5000
@@ -132,6 +138,7 @@ const SlotMachine = ({
 
             // Two oranges + seven - 6%
             {
+                id: [4],
                 pattern: () => [orange, orange, seven],
                 weight: 6,
                 baseWin: 10000
@@ -139,6 +146,7 @@ const SlotMachine = ({
 
             // Three grapes - 6%
             {
+                id: 5,
                 pattern: [grapes, grapes, grapes],
                 weight: 6,
                 baseWin: 12500
@@ -146,6 +154,7 @@ const SlotMachine = ({
 
             // Three watermelons - 4%
             {
+                id: 6,
                 pattern: [watermelon, watermelon, watermelon],
                 weight: 4,
                 baseWin: 20000
@@ -153,6 +162,7 @@ const SlotMachine = ({
 
             // Two grapes + seven - 2.4%
             {
+                id: 100,
                 pattern: () => [grapes, grapes, seven],
                 weight: 3.5,
                 baseWin: 25000
@@ -160,6 +170,7 @@ const SlotMachine = ({
 
             // Three clovers - 2%
             {
+                id: 7,
                 pattern: [clover, clover, clover],
                 weight: 2,
                 baseWin: 40000
@@ -167,13 +178,15 @@ const SlotMachine = ({
 
             // Two watermelons + seven - 2%
             {
+                id: 100,
                 pattern: () => [watermelon, watermelon, seven],
                 weight: 2,
                 baseWin: 40000
             },
 
-            // Three clovers - 1.5%
+            // Two clovers + seven - 1.5%
             {
+                id: 100,
                 pattern: () => [clover, clover, seven],
                 weight: 1.5,
                 baseWin: 80000
@@ -181,6 +194,7 @@ const SlotMachine = ({
 
             // Three sevens (jackpot) - 1%
             {
+                id: 8,
                 pattern: [seven, seven, seven],
                 weight: 1,
                 baseWin: 100000
@@ -200,6 +214,7 @@ const SlotMachine = ({
 
                 setWonAmount(patternObj.baseWin * multiplier);
                 setBalance(prev => prev + patternObj.baseWin * multiplier);
+                setWinId(patternObj.id);
                 break;
             }
             random -= patternObj.weight;
