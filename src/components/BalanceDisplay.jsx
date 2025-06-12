@@ -1,4 +1,4 @@
-const BalanceDisplay = ({balance}) => {
+const BalanceDisplay = ({ balance }) => {
     return (
         <>
             <div className='text-2xl font-bold'>
