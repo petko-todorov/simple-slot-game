@@ -12,6 +12,7 @@ function App() {
     const [autoAnimationStart, setAutoAnimationStart] = useState(false);
     const [triggerSpin, setTriggerSpin] = useState(0);
     const [bet, setBet] = useState(500);
+    const [multiplier, setMultiplier] = useState(1);
 
     const handleSpin = () => {
         if (isSpinning) return;
@@ -39,11 +40,14 @@ function App() {
                     triggerSpin={triggerSpin}
                 />
 
-                <PayoutTable />
+                <PayoutTable
+                    multiplier={multiplier}
+                />
 
                 <BetControls
                     bet={bet}
                     setBet={setBet}
+                    setMultiplier={setMultiplier}
                 />
 
                 <SpinButton
