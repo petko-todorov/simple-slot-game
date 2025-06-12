@@ -23,7 +23,13 @@ const weightedItems = [
     { item: item6, weight: 0.03 }, // Seven
 ];
 
-const SlotMachine = ({ autoAnimationStart, triggerSpin }) => {
+const SlotMachine = ({
+    autoAnimationStart,
+    triggerSpin,
+    setWonAmount,
+    multiplier,
+    setBalance
+}) => {
     const winChance = 0.9;
     const items = [item1, item2, item3, item4, item5, item6];
     const [isWon, setIsWon] = useState(false);
@@ -176,7 +182,7 @@ const SlotMachine = ({ autoAnimationStart, triggerSpin }) => {
             // Three sevens (jackpot) - 1%
             {
                 pattern: [seven, seven, seven],
-                weight: 1, 
+                weight: 1,
                 baseWin: 100000
             }
         ];
@@ -191,6 +197,9 @@ const SlotMachine = ({ autoAnimationStart, triggerSpin }) => {
                 selectedPattern = typeof patternObj.pattern === 'function' ?
                     patternObj.pattern() :
                     patternObj.pattern;
+
+                setWonAmount(patternObj.baseWin * multiplier);
+                setBalance(prev => prev + patternObj.baseWin * multiplier);
                 break;
             }
             random -= patternObj.weight;
@@ -210,7 +219,7 @@ const SlotMachine = ({ autoAnimationStart, triggerSpin }) => {
         return isWin ? winningSpin(items) : lostSpin(items);
     };
 
-    const [currentValues, setCurrentValues] = useState(() => getRandomItems());
+    const [currentValues, setCurrentValues] = useState([]);
 
     useEffect(() => {
         if (triggerSpin > 0) {

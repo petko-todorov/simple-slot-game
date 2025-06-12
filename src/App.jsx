@@ -5,14 +5,14 @@ import BalanceDisplay from './components/BalanceDisplay';
 import BetControls from './components/BetControls';
 import PayoutTable from './components/PayoutTable';
 
-const balance = 5000;
-
 function App() {
     const [isSpinning, setIsSpinning] = useState(false);
     const [autoAnimationStart, setAutoAnimationStart] = useState(false);
     const [triggerSpin, setTriggerSpin] = useState(0);
     const [bet, setBet] = useState(500);
     const [multiplier, setMultiplier] = useState(1);
+    const [wonAmount, setWonAmount] = useState(0);
+    const [balance, setBalance] = useState(5000);
 
     const handleSpin = () => {
         if (isSpinning) return;
@@ -38,6 +38,9 @@ function App() {
                     isSpinning={isSpinning}
                     autoAnimationStart={autoAnimationStart}
                     triggerSpin={triggerSpin}
+                    setWonAmount={setWonAmount}
+                    multiplier={multiplier}
+                    setBalance={setBalance}
                 />
 
                 <PayoutTable
