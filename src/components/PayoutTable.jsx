@@ -1,14 +1,15 @@
 import seven from '../assets/seven.png';
+import SlotCounter from 'react-slot-counter';
 
 const payouts = [
-    { icons: "🍒", amount: "1,000" },
-    { icons: "🍒🍒", amount: "2,500" },
-    { icons: "🍒🍒🍒", amount: "5,000" },
-    { icons: "🍊🍇🍉", amount: "2,500" },
-    { icons: "🍊🍊🍊", amount: "5,000" },
-    { icons: "🍇🍇🍇", amount: "12,500" },
-    { icons: "🍉🍉🍉", amount: "20,000" },
-    { icons: "🍀🍀🍀", amount: "40,000" },
+    { icons: "🍒", base: "1,000" },
+    { icons: "🍒🍒", base: "2,500" },
+    { icons: "🍒🍒🍒", base: "5,000" },
+    { icons: "🍊🍇🍉", base: "2,500" },
+    { icons: "🍊🍊🍊", base: "5,000" },
+    { icons: "🍇🍇🍇", base: "12,500" },
+    { icons: "🍉🍉🍉", base: "20,000" },
+    { icons: "🍀🍀🍀", base: "40,000" },
     {
         icons:
             <div className='flex gap-2 items-center mt-1.5 pb-1'>
@@ -16,13 +17,20 @@ const payouts = [
                 <img src={seven} className='w-6 h-6' alt='seven' />
                 <img src={seven} className='w-6 h-6' alt='seven' />
             </div>,
-        amount: "120,000",
+        base: "100,000",
     },
 ];
 
-const PayoutTable = () => {
+const PayoutTable = ({ multiplier }) => {
+
+    const formatPayout = (base, multiplier) => {
+        const numericValue = parseInt(base.replace(/,/g, ""), 10); // Remove commas, parse to int
+        const result = numericValue * multiplier;
+        return result.toLocaleString(); // Add commas back
+    };
+
     return (
-        <div className="w-2/3 rounded-lg p-1 max-2xl:w-full mb-2">
+        <div className="w-2/3 rounded-lg p-1 max-2xl:w-full">
             <div className="flex flex-wrap justify-between">
                 {payouts.map((item, idx) => (
                     <div
@@ -32,15 +40,23 @@ const PayoutTable = () => {
                         <div className="text-3xl">
                             {item.icons}
                         </div>
-                        <div className="text-orange-300 font-bold text-sm mt-1">
-                            {item.amount} 🪙
+                        <div className="text-orange-300 font-bold textsm mt-1 flex items-center">
+                            🪙
+                            <SlotCounter
+                                key={formatPayout(item.base, multiplier)}
+                                value={formatPayout(item.base, multiplier).toString()}
+                                dummyCharacters={'0123456789'.split('')}
+                            />
                         </div>
                     </div>
                 ))}
             </div>
 
             <div className="flex justify-center items-center text-center text-yellow-400 text-lg font-semibold bg-blue-800 rounded-md p-6 mt-1 w-[99%] mx-auto">
-                <img src={seven} className="w-6 h-6" alt="" /> Награда x2
+                <img src={seven} className="w-6 h-6" alt="" />
+                <span className='ml-1.5 text-xl'>
+                    Reward x2
+                </span>
             </div>
         </div>
     );
