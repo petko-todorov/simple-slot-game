@@ -83,68 +83,67 @@ const SlotMachine = ({
         const watermelon = weightedItems[3].item;
         const clover = weightedItems[4].item;
         const seven = weightedItems[5].item;
-
+        
         const winPatterns = [
-            // Single cherry - 25%
             {
                 id: 0,
-                pattern: () => [cherries, getWeightedRandomItem(weightedItems.slice(1)), getWeightedRandomItem(weightedItems.slice(1))],
-                weight: 25,
+                pattern: () => {                    
+                    const filteredItems = weightedItems.slice(1).filter(item => item.item !== seven);                    
+                    return [cherries, getWeightedRandomItem(filteredItems), getWeightedRandomItem(filteredItems)];
+                },
+                weight: 20,
                 baseWin: 1000
             },
 
-            // Two cherries - 12.5%
+            {
+                id: 14,
+                pattern: () => [cherries, seven, getWeightedRandomItem(weightedItems.slice(1))],
+                weight: 13,
+                baseWin: 2000
+            },
+
             {
                 id: 1,
                 pattern: () => [cherries, cherries, getWeightedRandomItem(weightedItems.slice(1))],
-                weight: 12.5,
+                weight: 10,
                 baseWin: 2500
             },
 
-            // Mixed fruits (any 3 different fruits) - 12.5%
             {
                 id: 3,
-                pattern: () => {
-                    const fruits = [orange, grapes, watermelon];
-                    return [...fruits].sort(() => Math.random() - 0.5);
-                },
-                weight: 12.5,
+                pattern: [orange, grapes, watermelon],
+                weight: 10,
                 baseWin: 2500
             },
 
-            // Three cherries - 8%
             {
                 id: 2,
                 pattern: [cherries, cherries, cherries],
-                weight: 8,
+                weight: 7,
                 baseWin: 5000
             },
 
-            // Three oranges - 8%
             {
                 id: 4,
                 pattern: [orange, orange, orange],
-                weight: 8,
+                weight: 7,
                 baseWin: 5000
             },
 
-            // Two cherries + seven - 8%
             {
-                id: [1],
+                id: 9,
                 pattern: () => [cherries, cherries, seven],
-                weight: 8,
+                weight: 7,
                 baseWin: 5000
             },
 
-            // Two oranges + seven - 6%
             {
-                id: [4],
+                id: 10,
                 pattern: () => [orange, orange, seven],
                 weight: 6,
                 baseWin: 10000
             },
 
-            // Three grapes - 6%
             {
                 id: 5,
                 pattern: [grapes, grapes, grapes],
@@ -152,7 +151,6 @@ const SlotMachine = ({
                 baseWin: 12500
             },
 
-            // Three watermelons - 4%
             {
                 id: 6,
                 pattern: [watermelon, watermelon, watermelon],
@@ -160,15 +158,13 @@ const SlotMachine = ({
                 baseWin: 20000
             },
 
-            // Two grapes + seven - 2.4%
             {
-                id: 100,
+                id: 11,
                 pattern: () => [grapes, grapes, seven],
                 weight: 3.5,
                 baseWin: 25000
             },
 
-            // Three clovers - 2%
             {
                 id: 7,
                 pattern: [clover, clover, clover],
@@ -176,23 +172,20 @@ const SlotMachine = ({
                 baseWin: 40000
             },
 
-            // Two watermelons + seven - 2%
             {
-                id: 100,
+                id: 12,
                 pattern: () => [watermelon, watermelon, seven],
                 weight: 2,
                 baseWin: 40000
             },
 
-            // Two clovers + seven - 1.5%
             {
-                id: 100,
+                id: 13,
                 pattern: () => [clover, clover, seven],
                 weight: 1.5,
                 baseWin: 80000
             },
 
-            // Three sevens (jackpot) - 1%
             {
                 id: 8,
                 pattern: [seven, seven, seven],
