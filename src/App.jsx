@@ -4,6 +4,7 @@ import SpinButton from './components/SpinButton'
 import BalanceDisplay from './components/BalanceDisplay';
 import BetControls from './components/BetControls';
 import PayoutTable from './components/PayoutTable';
+import WinAmountPop from './components/WinAmountPop';
 
 function App() {
     const [isSpinning, setIsSpinning] = useState(false);
@@ -14,7 +15,8 @@ function App() {
     const [wonAmount, setWonAmount] = useState(0);
     const [balance, setBalance] = useState(600000);
     const [winId, setWinId] = useState();
-    
+    const [showPopup, setShowPopup] = useState(false);
+
     const handleSpin = () => {
         setWinId(null);
 
@@ -48,6 +50,7 @@ function App() {
                     setBalance={setBalance}
                     bet={bet}
                     setWinId={setWinId}
+                    setShowPopup={setShowPopup}
                 />
 
                 <PayoutTable
@@ -69,6 +72,13 @@ function App() {
                 <BalanceDisplay
                     balance={balance}
                 />
+
+               {wonAmount > 0 && (
+                    <WinAmountPop
+                        wonAmount={wonAmount}
+                        showPopup={showPopup}
+                    />
+               )}
             </div>
         </>
     )
