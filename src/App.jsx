@@ -4,7 +4,6 @@ import SpinButton from './components/SpinButton'
 import BalanceDisplay from './components/BalanceDisplay';
 import BetControls from './components/BetControls';
 import PayoutTable from './components/PayoutTable';
-import SlotCounter from 'react-slot-counter';
 
 function App() {
     const [isSpinning, setIsSpinning] = useState(false);
@@ -15,7 +14,7 @@ function App() {
     const [wonAmount, setWonAmount] = useState(0);
     const [balance, setBalance] = useState(600000);
     const [winId, setWinId] = useState();
-
+    
     const handleSpin = () => {
         setWinId(null);
 
