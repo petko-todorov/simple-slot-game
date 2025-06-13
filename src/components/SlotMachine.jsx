@@ -8,6 +8,8 @@ import item4 from '../assets/watermelon.png';
 import item5 from '../assets/clover.png';
 import item6 from '../assets/seven.png';
 
+import Confetti from 'react-confetti'
+
 const wrapImage = (src) => (
     <div className="w-56 h-56 flex justify-center items-center">
         <img src={src} alt="" className="w-full h-full object-contain" />
@@ -34,7 +36,9 @@ const SlotMachine = ({
 }) => {
     const winChance = 0.9;
     const items = [item1, item2, item3, item4, item5, item6];
-
+    const [showConfetti, setShowConfetti] = useState(false);
+    console.log(showConfetti);
+    
     const lostSpin = (items) => {
         const availableItems = items.filter(item => item !== item1); // exclude cherries
         let result;
@@ -87,8 +91,8 @@ const SlotMachine = ({
         const winPatterns = [
             {
                 id: 0,
-                pattern: () => {                    
-                    const filteredItems = weightedItems.slice(1).filter(item => item.item !== seven);                    
+                pattern: () => {
+                    const filteredItems = weightedItems.slice(1).filter(item => item.item !== seven);
                     return [cherries, getWeightedRandomItem(filteredItems), getWeightedRandomItem(filteredItems)];
                 },
                 weight: 20,
@@ -208,6 +212,14 @@ const SlotMachine = ({
                 setWonAmount(patternObj.baseWin * multiplier);
                 setBalance(prev => prev + patternObj.baseWin * multiplier);
                 setWinId(patternObj.id);
+                debugger
+                if (patternObj.id === 8) {
+                    setShowConfetti(true);
+                    setTimeout(() => {
+                        setShowConfetti(false);
+                    }, 10000);
+                };
+                 
                 break;
             }
             random -= patternObj.weight;
@@ -260,6 +272,13 @@ const SlotMachine = ({
                 dummyCharacters={items.map(item => wrapImage(item))}
             // TODO speed={} 
             />
+
+            {showConfetti && (
+                <Confetti
+                    numberOfPieces={2000}
+                    recycle={false}
+                />
+            )}
         </div>
     );
 };
