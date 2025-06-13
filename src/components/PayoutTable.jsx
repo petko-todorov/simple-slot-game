@@ -50,7 +50,7 @@ const PayoutTable = ({ multiplier, winId }) => {
                     <div
                         key={idx}
                         className={`w-[30%] rounded-md p-2 m-1 flex flex-col items-center text-center ${item.id === activeWinId
-                            ? 'bg-amber-600 border-2 border-amber-600'
+                            ? 'bg-amber-200'
                             : 'bg-blue-800'
                             }`}
                     >
@@ -69,7 +69,11 @@ const PayoutTable = ({ multiplier, winId }) => {
                 ))}
             </div>
 
-            <div className="flex justify-center items-center text-center text-yellow-400 text-lg font-semibold bg-blue-800 rounded-md p-6 mt-1 w-[99%] mx-auto">
+            <div className={`flex justify-center items-center text-center text-yellow-400 text-lg font-semibold rounded-md p-6 mt-1 w-[99%] mx-auto ${[9, 10, 11, 12, 13, 14].includes(activeWinId)
+                ? 'bg-amber-200'
+                : 'bg-blue-800'}
+            `}
+            >
                 <img src={seven} className="w-6 h-6" alt="" />
                 <span className='ml-1.5 text-xl'>
                     Reward x2
