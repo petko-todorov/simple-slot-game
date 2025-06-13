@@ -32,13 +32,13 @@ const SlotMachine = ({
     multiplier,
     setBalance,
     bet,
-    setWinId
+    setWinId,
+    setShowPopup
 }) => {
     const winChance = 0.9;
     const items = [item1, item2, item3, item4, item5, item6];
     const [showConfetti, setShowConfetti] = useState(false);
-    console.log(showConfetti);
-    
+
     const lostSpin = (items) => {
         const availableItems = items.filter(item => item !== item1); // exclude cherries
         let result;
@@ -61,6 +61,7 @@ const SlotMachine = ({
         } while (!result);
 
         setBalance(prev => prev - bet);
+        setWonAmount(0);
         return result;
     };
 
@@ -87,7 +88,7 @@ const SlotMachine = ({
         const watermelon = weightedItems[3].item;
         const clover = weightedItems[4].item;
         const seven = weightedItems[5].item;
-        
+
         const winPatterns = [
             {
                 id: 0,
@@ -210,16 +211,18 @@ const SlotMachine = ({
                     patternObj.pattern;
 
                 setWonAmount(patternObj.baseWin * multiplier);
+                setTimeout(() => setShowPopup(true), 800)
+                setTimeout(() => setShowPopup(false), 2500)
                 setBalance(prev => prev + patternObj.baseWin * multiplier);
                 setWinId(patternObj.id);
-                debugger
+
                 if (patternObj.id === 8) {
                     setShowConfetti(true);
                     setTimeout(() => {
                         setShowConfetti(false);
-                    }, 10000);
+                    }, 8500);
                 };
-                 
+
                 break;
             }
             random -= patternObj.weight;
@@ -275,6 +278,8 @@ const SlotMachine = ({
 
             {showConfetti && (
                 <Confetti
+                    width={window.innerWidth}
+                    height={window.innerHeight}
                     numberOfPieces={2000}
                     recycle={false}
                 />
