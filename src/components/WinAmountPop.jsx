@@ -1,7 +1,7 @@
 import { motion, AnimatePresence } from "framer-motion";
 
 const WinAmountPop = ({ wonAmount, showPopup }) => {
-    const formattedAmount = new Intl.NumberFormat('fr-FR').format(wonAmount);
+    const formattedAmount = new Intl.NumberFormat("fr-FR").format(wonAmount);
 
     return (
         <AnimatePresence>
