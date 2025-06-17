@@ -36,7 +36,7 @@ const SlotMachine = ({
     setShowPopup,
     setWasWin,
 }) => {
-    const winChance = 0.2;
+    const winChance = 0.15;
     const items = [item1, item2, item3, item4, item5, item6];
     const [showConfetti, setShowConfetti] = useState(false);
 
@@ -309,14 +309,14 @@ const SlotMachine = ({
                 dummyCharacters={items.map((item) => wrapImage(item))}
             />
 
-            {showConfetti && (
+            {/* {showConfetti && (
                 <Confetti
                     width={window.innerWidth}
                     height={window.innerHeight}
                     numberOfPieces={2000}
                     recycle={false}
                 />
-            )}
+            )} */}
         </div>
     );
 };
