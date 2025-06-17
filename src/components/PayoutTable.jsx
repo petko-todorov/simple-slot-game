@@ -52,7 +52,7 @@ const PayoutTable = ({ multiplier, winId }) => {
                         key={idx}
                         className={`w-[30%] rounded-md p-2 m-1 flex flex-col items-center text-center ${
                             item.id === activeWinId
-                                ? "bg-amber-200"
+                                ? "bg-emerald-600"
                                 : "bg-blue-800"
                         }`}
                     >
@@ -75,7 +75,7 @@ const PayoutTable = ({ multiplier, winId }) => {
             <div
                 className={`flex justify-center items-center text-center text-yellow-400 text-lg font-semibold rounded-md p-6 mt-1 w-[99%] mx-auto ${
                     [9, 10, 11, 12, 13, 14].includes(activeWinId)
-                        ? "bg-amber-200"
+                        ? "bg-emerald-600"
                         : "bg-blue-800"
                 }
             `}
