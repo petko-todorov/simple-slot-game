@@ -42,7 +42,7 @@ function App() {
 
     return (
         <>
-            <div className="h-screen flex flex-col items-center justify-center gap-1 w-1/2 mx-auto select-none backdrop-blur-md">
+            <div className="h-screen flex flex-col items-center justify-center gap-1 w-2/3 mx-auto select-none backdrop-blur-md">
                 <h1 className="text-6xl font-bold text-center text-amber-400">
                     Slot Machine
                 </h1>
