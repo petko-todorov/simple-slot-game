@@ -1,10 +1,10 @@
-import { useEffect, useState } from "react";
-import SlotMachine from "./components/SlotMachine";
-import SpinButton from "./components/SpinButton";
-import BalanceDisplay from "./components/BalanceDisplay";
-import BetControls from "./components/BetControls";
-import PayoutTable from "./components/PayoutTable";
-import WinAmountPop from "./components/WinAmountPop";
+import { useEffect, useState } from 'react';
+import SlotMachine from './components/SlotMachine';
+import SpinButton from './components/SpinButton';
+import BalanceDisplay from './components/BalanceDisplay';
+import BetControls from './components/BetControls';
+import PayoutTable from './components/PayoutTable';
+import WinAmountPop from './components/WinAmountPop';
 
 function App() {
     const [isSpinning, setIsSpinning] = useState(false);
